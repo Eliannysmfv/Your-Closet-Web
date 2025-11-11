@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+      
+        body { background-color: #f4f7f9; } 
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1, h2 { color: #586071; } 
+        
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid #e0e6ed; 
+            padding-bottom: 10px; 
+            margin-bottom: 25px;
+        }
+
+      
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-logout:hover { background-color: #c0392b; }
+
+   
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .module-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e6ed; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .module-card:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+            border-color: #aeb8c4;
+        }
+        .module-card h3 {
+            color: #586071;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+        .module-card p {
+            color: #777;
+            font-size: 0.9em;
+        }
+        .module-icon {
+            font-size: 3em;
+            color: #8c98a6;
+        }
+        
+
+        .input-group-admin { margin-bottom: 15px; }
+        .input-group-admin label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        .input-group-admin input, .input-group-admin select, .input-group-admin textarea { 
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; 
+        }
+
+
+        #inventario-tabla-container table, #pedidos-tabla-container table {
+            width: 100%; border-collapse: collapse; font-size: 0.9em; text-align: left;
+            border: 1px solid #ddd;
+        }
+        #inventario-tabla-container th, #inventario-tabla-container td,
+        #pedidos-tabla-container th, #pedidos-tabla-container td {
+            padding: 10px; border: 1px solid #eee;
+        }
+        #inventario-tabla-container thead {
+            background-color: #586071; color: white;
+        }
+        #pedidos-tabla-container thead {
+            background-color: #34495e; color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        
+        <header>
+            <h1 style="margin: 0;">Panel de Administración</h1>
+            <button class="btn-logout" id="btn-cerrar-sesion-admin">Cerrar Sesión</button>
+        </header>
+        
+        <div id="dashboard-menu-view">
+            <h2 style="font-weight: 300;">Bienvenido, Administrador.</h2>
+            <p style="color: #777; margin-bottom: 30px;">Seleccione una gestión para empezar a trabajar.</p>
+
+            <div class="module-grid">
+                <div class="module-card" data-module="inventario">
+                    <i class="fas fa-boxes module-icon"></i>
+                    <h3>Gestión de Inventario</h3>
+                    <p>Añadir, modificar y ver el stock de productos.</p>
+                </div>
+
+                <div class="module-card" data-module="pedidos">
+                    <i class="fas fa-receipt module-icon"></i>
+                    <h3>Gestión de Pedidos</h3>
+                    <p>Revisar, actualizar y gestionar pedidos pagados.</p>
+                </div>
+
+                <div class="module-card" data-module="usuarios">
+                    <i class="fas fa-users module-icon"></i>
+                    <h3>Gestión de Usuarios</h3>
+                    <p>Administrar cuentas de clientes y staff.</p>
+                </div>
+
+                <div class="module-card" data-module="reportes">
+                    <i class="fas fa-chart-line module-icon"></i>
+                    <h3>Reportes de Ventas</h3>
+                    <p>Visualizar métricas y resumen de ventas.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="gestion-content-area" style="margin-top: 40px; display: none;">
+            <button id="btn-volver-dashboard" style="background-color: #8c98a6; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
+                ← Volver al Menú Principal
+            </button>
+            
+            <div id="inventario-view" class="gestion-view" style="display: none;">
+                <h3>Gestión de Inventario 📦</h3>
+
+                <button id="btn-toggle-crear-producto" style="background-color: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
+                    + Agregar Nuevo Producto
+                </button>
+
+                <div id="form-crear-producto-container" style="border: 1px solid #c8e6c9; padding: 20px; border-radius: 5px; margin-bottom: 30px; background-color: #f7fcf7; display: none;">
+                    <h4>Crear Nuevo Producto</h4>
+                    <form id="form-crear-producto" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="input-group-admin">
+                            <label for="prod-id">ID Producto:</label>
+                            <input type="text" id="prod-id" value="PROD-XXX" disabled style="background-color: #eee;"> 
+                        </div>
+                        <div class="input-group-admin">
+                            <label for="prod-nombre">Nombre (*):</label>
+                            <input type="text" id="prod-nombre" required>
+                        </div>
+                        <div class="input-group-admin">
+                            <label for="prod-precio">Precio (S/.):</label>
+                            <input type="number" id="prod-precio" step="0.01" min="0" required>
+                        </div>
+                        <div class="input-group-admin">
+                            <label for="prod-stock">Stock Inicial:</label>
+                            <input type="number" id="prod-stock" min="0" required>
+                        </div>
+                        <div class="input-group-admin">
+                            <label for="prod-categoria">Categoría (*):</label>
+                            <select id="prod-categoria" required>
+                                <option value="">Seleccione una categoría</option>
+                                <option value="Vestidos">Vestidos</option>
+                                <option value="Blusas">Blusas</option>
+                                <option value="Pantalones">Pantalones</option>
+                                <option value="Accesorios">Accesorios</option>
+                            </select>
+                        </div>
+                        <div class="input-group-admin" style="grid-column: span 2;">
+                            <label for="prod-descripcion">Descripción:</label>
+                            <textarea id="prod-descripcion" rows="2"></textarea>
+                        </div>
+
+                        <div style="grid-column: span 2; text-align: right;">
+                            <button type="submit" style="background-color: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                                Guardar Producto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <h4>Lista de Productos Actual (CRUD: Leer)</h4>
+                <div id="inventario-tabla-container">
+                    <p>Cargando inventario...</p>
+                </div>
+            </div>
+
+            <div id="pedidos-view" class="gestion-view" style="display: none;">
+                <h3>Gestión de Pedidos 🧾</h3>
+
+                <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e6ed; border-radius: 5px; background-color: #f9f9f9;">
+                    <label for="filtro-estado" style="font-weight: bold; margin-right: 10px;">Filtrar por Estado:</label>
+                    <select id="filtro-estado" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="todos">Todos los Pedidos</option>
+                        <option value="Pagado">Pagado (Completado)</option>
+                        <option value="Enviado">Enviado</option>
+                        <option value="Entregado">Entregado</option>
+                    </select>
+                    <span id="pedidos-conteo" style="margin-left: 20px; font-weight: bold; color: #586071;"></span>
+                </div>
+
+
+
+        <div style="border: 1px solid #dcdcdc; padding: 15px; margin-bottom: 25px; border-radius: 5px; background-color: #fcfcfc;">
+            <h3>🛍️ Nuevo Pedido Presencial (TIENDA)</h3>
+            <p style="font-size: 0.9em; color: #777;">Usado para registrar ventas realizadas directamente en el punto de venta.</p>
+            <form id="form-pedido-tienda" style="margin-top: 15px;">
+                <div style="margin-bottom: 10px;">
+                    <label for="cliente-tienda-email" style="font-weight: bold;">Email Cliente (Opcional):</label>
+                    <input type="email" id="cliente-tienda-email" placeholder="ej: cliente@tienda.com" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
+                </div>
+                
+                <h4 style="margin-top: 20px;">Productos del Pedido:</h4>
+                <div id="productos-tienda-container" style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 15px;">
+                    <button type="button" onclick="agregarFilaProducto()" style="background-color: #2c3e50; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">+ Añadir Producto</button>
+                </div>
+                
+                <button type="submit" style="background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Registrar Venta TIENDA</button>
+            </form>
+        </div>
+
+
+
+                <h4>Historial de Pedidos de Clientes</h4>
+                <div id="pedidos-tabla-container" style="overflow-x: auto;">
+                    <p>Cargando pedidos de clientes...</p>
+                </div>
+            </div>
+
+            <div id="usuarios-view" class="gestion-view" style="display: none;">
+                <h3>Gestión de Usuarios 🧑‍💻</h3>
+                <p>Aquí se listarán y gestionarán las cuentas de clientes y administradores.</p>
+
+                <div id="usuarios-tabla-container" style="margin-top: 20px;">
+                    <p>Cargando lista de usuarios...</p>
+                </div>
+            </div>
+
+            <div id="reportes-view" class="gestion-view" style="display: none;">
+                <h3>Reportes y Ventas 📈</h3>
+                <p>Visualice las métricas clave de su negocio.</p>
+                
+                <div id="reportes-container" style="margin-top: 20px;">
+                    <p>Calculando reportes...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="../js/admin_dashboard.js"></script>
+    <script src="../js/login_admin.js"></script> 
+</body>
+</html>

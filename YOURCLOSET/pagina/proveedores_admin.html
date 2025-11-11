@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Proveedores - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css"> 
+    
+    <style>
+        
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        #proveedor-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
+        h3 { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        
+        
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+        .grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 10px; }
+        .grid-2-cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+        label { font-weight: bold; font-size: 0.9em; }
+
+     
+        button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        button:hover { opacity: 0.9; }
+        .btn-regresar { background-color: #007bff; margin-top: 20px; }
+        .btn-eliminar { background-color: #dc3545; padding: 5px 10px; width: auto; }
+     
+        .btn-editar-prov { background-color: #007bff; padding: 5px 10px; width: auto; margin: 0 3px;}
+
+       
+        #proveedores-tabla {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        #proveedores-tabla th, #proveedores-tabla td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        #proveedores-tabla th { background-color: #f2f2f2; }
+
+        
+        @media (max-width: 600px) {
+            .grid-3-cols, .grid-2-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="proveedor-container">
+        <h2>Gestión de Proveedores</h2>
+        
+<button onclick="window.location.href = 'inventario_login.html?r=' + new Date().getTime();" class="btn-limpiar">
+    ← Volver a Inventario
+</button>
+
+
+        <div id="mensaje-error-inventario" style="margin: 15px 0; padding: 10px; text-align: center;"></div>
+
+        <h3></h3>
+        <form id="form-proveedor">
+            <input type="hidden" id="proveedor-id" name="proveedor-id">
+            
+            <div class="grid-3-cols">
+                <div>
+                    <label for="nombre-empresa">Nombre Empresa</label>
+                    <input type="text" id="nombre-empresa" placeholder="Ej: Textiles Perú S.A." required>
+                </div>
+                <div>
+                    <label for="contacto-proveedor">Contacto</label>
+                    <input type="text" id="contacto-proveedor" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div>
+                    <label for="telefono-proveedor">Teléfono</label>
+                    <input type="text" id="telefono-proveedor" placeholder="Ej: 987654321" required>
+                </div>
+            </div>
+            <div class="grid-2-cols">
+                <div>
+                    <label for="email-proveedor">Email (Opcional)</label>
+                    <input type="email" id="email-proveedor" placeholder="Ej: contacto@empresa.com">
+                </div>
+                <button type="submit" id="btn-guardar-prov" class="btn-guardar" >+ Agregar Proveedor</button>
+                <button type="button" onclick="window.limpiarFormularioProveedor()" class="btn-limpiar">Limpiar</button>
+            </div>
+        </form>
+
+        <h3>Proveedores Registrados</h3>
+        <table id="proveedores-tabla">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="proveedores-registrados"> 
+                </tbody>
+        </table>
+    </div>
+
+    <script src="../js/productos.js"></script>
+    <script src="../js/inventario.js"></script> 
+    
+    <script>
+       
+        document.addEventListener('DOMContentLoaded', () => {
+      
+            if (window.renderizarProveedores) window.renderizarProveedores(); 
+        });
+    </script>
+</body>
+</html>

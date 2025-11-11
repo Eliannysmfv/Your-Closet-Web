@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario - Your Closet (Admin)</title>
+    <link rel="stylesheet" href="../estilos/inicio.css">
+    
+    <style>
+ 
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        #login-container, #gestion-inventario-container {
+            width: 90%;
+            max-width: 800px; 
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; }
+        h3 { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        
+   
+        input[type="text"], input[type="number"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0; 
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+ 
+        .grid-3-cols, .grid-2-cols {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .grid-3-cols { grid-template-columns: repeat(3, 1fr); }
+        .grid-2-cols { grid-template-columns: 1fr 150px; }
+        
+        label { font-weight: bold; font-size: 0.9em; }
+
+    
+        button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        button:hover { opacity: 0.9; }
+        .btn-logout { background-color: #f44336; margin-top: 20px; }
+        .btn-editar, .btn-eliminar {
+            width: auto;
+            padding: 5px 10px;
+            margin: 3px;
+            display: inline-block;
+        }
+        .btn-editar { background-color: #007bff; }
+        .btn-eliminar { background-color: #dc3545; }
+        .btn-proveedor { background-color: #6c757d; margin-bottom: 20px; }
+
+
+       
+        #inventario-tabla {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        #inventario-tabla th, #inventario-tabla td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        #inventario-tabla th { 
+            background-color: #f2f2f2; 
+        }
+        #inventario-tabla img { max-width: 50px; height: auto; }
+        .alerta-stock { background-color: #ffdddd !important; } 
+        #mensaje-error-inventario { color: red; text-align: center; margin-bottom: 10px; }
+        #vista-previa { border: 2px dashed #ccc; padding: 5px; }
+        
+       
+        @media (max-width: 600px) {
+            .grid-3-cols, .grid-2-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-container" style="display:none;">
+        <h2>Acceso de Administrador</h2>
+        <form id="form-login">
+            <label for="user"><b>Usuario</b></label>
+            <input type="text" placeholder="Ingresa Usuario" name="user" id="user" required>
+
+            <label for="pass"><b>Contraseña</b></label>
+            <input type="password" placeholder="Ingresa Contraseña" name="pass" id="pass" required>
+                
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    </div>
+
+    <div id="gestion-inventario-container" style="display:none;">
+        <h2>Gestión Inventario</h2>
+        
+        <button onclick="window.location.href = 'proveedores_admin.html';" class="btn-nuevo">
+            Gestionar Proveedores
+        </button>
+
+        <form id="form-producto">
+            
+            <div id="mensaje-error-inventario"></div>
+            
+            <input type="hidden" id="producto-id" name="producto-id">
+
+            <div class="grid-3-cols">
+                <div>
+                    <label for="nombre-producto">Nombre del Producto</label>
+                    <input type="text" id="nombre-producto" required>
+                </div>
+                <div>
+                    <label for="categoria-producto">Categoría</label>
+                    <select id="categoria-producto" required>
+                        <option value="">-- Seleccione una Categoría --</option>
+                        <option value="Vestidos">Vestidos</option>
+                        <option value="Tops">Tops / Blusas</option>
+                        <option value="Pantalones">Pantalones</option>
+                        <option value="Faldas">Faldas</option>
+                        <option value="Accesorios">Accesorios</option>
+                        <option value="Ofertas">Ofertas</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="precio-producto">Precio (S/)</label>
+                    <input type="number" id="precio-producto" step="0.01" min="0.01" required>
+                </div>
+            </div>
+
+            <div class="grid-3-cols">
+                <div>
+                    <label for="stock-producto">Stock Actual</label>
+                    <input type="number" id="stock-producto" min="0" required>
+                </div>
+                <div>
+                    <label for="stock-minimo">Stock Mínimo (Alerta)</label>
+                    <input type="number" id="stock-minimo" min="1" value="5" required>
+                </div>
+                <div>
+                    <label for="proveedor-producto">Proveedor</label>
+                    <select id="proveedor-producto" required>
+                        <option value="">-- Cargando Proveedores... --</option>
+                        </select>
+                </div>
+            </div>
+            
+<div class="grid-2-cols" style="grid-template-columns: 2fr 1fr;">
+    <div>
+        <label for="imagen-file">Seleccionar Archivo de Imagen</label>
+        <small style="display: block; margin-top: -10px; margin-bottom: 5px;"></small>
+        <input type="file" 
+            id="imagen-file" 
+            accept="image/*" 
+            required 
+            onchange="handleImageUpload(this.files)"> 
+        
+        <input type="hidden" id="imagen-nombre" name="imagen-nombre">
+    </div>
+    
+    <div style="text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 4px;">
+        <label style="margin-bottom: 5px;">Vista Previa</label>
+        <div id="vista-previa-contenedor" style="max-width: 100%; max-height: 100px; display: flex; justify-content: center; align-items: center; overflow: hidden; height: 100px;">
+            <img id="vista-previa" src="" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%; display: none;">
+        </div>
+        <small id="nombre-archivo-actual" style="font-size: 0.7em; color: #555; display: block; margin-top: 5px;"></small>
+    </div>
+</div>
+
+            <div class="grid-2-cols">
+                    <button type="submit" class="btn-guardar">Guardar Producto</button>
+                    <button type="button" onclick="limpiarFormularioInventario()" class="btn-limpiar">Limpiar Formulario</button>
+            </div>
+        </form>
+
+        <h3>Inventario Actual</h3>
+        <table id="inventario-tabla">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cat.</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Proveedor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="inventario-items">
+                </tbody>
+        </table>
+
+        <button onclick="logoutInventario()" class="btn-limpiar">Cerrar Sesión</button>
+    </div>
+    
+    <script src="../js/productos.js"></script>
+    <script src="../js/inventario.js"></script> 
+
+</body>
+</html>

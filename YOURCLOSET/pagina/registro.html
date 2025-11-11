@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Cliente - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css">
+    <style>
+      
+        body { font-family: sans-serif; background-color: #f7f3f7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .registro-container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .registro-container h2 { text-align: center; color: #4b0082; margin-bottom: 25px; }
+        .registro-container label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        .registro-container input { width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-registro { background-color: #ffb6c1; color: #800080; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1em; font-weight: bold; transition: background-color 0.3s; }
+        .btn-registro:hover { background-color: #ff9cab; }
+        .link-login { display: block; text-align: center; margin-top: 15px; color: #4b0082; text-decoration: none; }
+        .mensaje { text-align: center; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="registro-container">
+        <h2>Crear Cuenta</h2>
+        <form id="form-registro"> <label for="reg-nombre">Nombre Completo:</label>
+        <input type="text" id="reg-nombre" required> <label for="reg-email">Email:</label>
+        <input type="email" id="reg-email" required> <label for="reg-telefono">Teléfono:</label>
+        <input type="text" id="reg-telefono" placeholder="Opcional"> <label for="reg-direccion">Dirección de Envío:</label>
+        <input type="text" id="reg-direccion" placeholder="Opcional"> <label for="reg-password">Contraseña:</label>
+        <input type="password" id="reg-password" required> <label for="reg-password-confirm">Confirmar Contraseña:</label>
+        <input type="password" id="reg-password-confirm" required> <button type="submit" class="btn-registro">Registrarse</button>
+        <div id="registro-mensaje" class="mensaje"></div> </form>
+        <a href="login_cliente.html" class="link-login">¿Ya tienes cuenta? Iniciar Sesión</a>
+    </div>
+    
+    <script src="../js/registro.js"></script>
+</body>
+</html>

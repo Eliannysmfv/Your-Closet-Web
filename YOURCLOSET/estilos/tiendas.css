@@ -1,0 +1,136 @@
+
+
+
+h1{
+color: rgb(219, 81, 152); 
+    font-size: 1.8em;
+    text-align: center;
+}
+
+
+.colecciones{
+border-bottom: 2px solid rgb(255,199,228);
+padding-bottom: 3px;
+ margin-bottom: 20px; 
+} 
+
+.tiendas-grid {
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start;
+    gap: 40px; 
+    padding: 30px 20px;
+    width: 100%; 
+    margin: 0 auto !important; 
+}
+
+
+.sede-info {
+
+    width: 400px; 
+    padding: 20px;
+    background-color: #fcfcfc; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: center; 
+}
+
+.navegador{
+    text-decoration: none;
+}
+nav a{
+    display: inline-block;
+    width: 15%;
+    background-color: rgb(228,73,153);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    margin-left: 45px;
+    margin-right: 45px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+nav{
+    background-color: rgb(255,199,228);
+}
+
+
+    
+
+.ubicaciones{
+
+width: 100%;
+height: 350px; 
+    margin-top: 15px;
+}
+
+
+@media (max-width: 850px) {
+    .tiendas-grid {
+        flex-direction: column; 
+        align-items: center;
+
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;    
+        padding: 30px 20px;
+    }
+
+    .sede-info {
+  width: 40%; 
+padding: 20px;
+ background-color: #fcfcfc; 
+ border-radius: 8px;
+ box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+ text-align: center;
+    }
+  }
+
+
+  .frases {
+    text-align: center;
+    color: var(--color-texto-oscuro);
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.divfrases {
+    background-color: rgb(255, 217, 237);
+    width: 100%;
+    height: auto;
+    margin: 10px auto;
+}
+
+#contenedor{
+    width: 90%;
+    margin: auto;
+    background-color: white;
+    padding-top: 10px;
+
+    padding-top: 2px; 
+    max-width: 1400px;
+
+}
+#banner {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    margin-top: 15px;
+    border-radius: 5px;
+
+    object-position: top;
+ 
+}
+header {
+    width: 100%;
+    margin-top: 20px; 
+    margin-bottom: 0;
+    overflow: hidden; 
+    border-radius: 5px;
+
+}
+
+

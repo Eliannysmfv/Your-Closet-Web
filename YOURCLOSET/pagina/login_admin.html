@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso Unificado - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css">
+    <style>
+    
+        body { 
+            background-color: #f7f3f7; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+
+            box-sizing: border-box;
+        }
+        .doble-login-container { 
+            width: 100%;
+            max-width: 600px; 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            text-align: center; 
+
+        
+        }
+        .login-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            margin-top: 20px;
+        }
+
+       
+        .login-card {
+            padding: 25px;
+            border-radius: 8px;
+            text-align: left;
+            border: 1px solid #eee;
+
+        }
+        .login-card h3 { 
+            text-align: center; 
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+
+       
+        .cliente-card { border-top: 5px solid #ffb6c1; }
+        .admin-card { border-top: 5px solid #800080; }
+        
+        
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    
+
+      
+        .btn-submit { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 15px;
+        }
+        .btn-cliente-login { background-color: #ffb6c1; color: #4b0082; }
+        .btn-admin-login { background-color: #800080; color: white; }
+        .btn-registro { background-color: #5cb85c; color: white; margin-top: 10px; }
+        
+        
+        .mensaje-error { color: #e74c3c; font-weight: bold; margin-top: 10px; text-align: center; }
+        
+        
+        @media (max-width: 768px) {
+            .login-grid { grid-template-columns: 1fr; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="doble-login-container">
+    <h2>Acceso al Panel Administrativo</h2>
+
+  
+
+        <div class="login-card admin-card">
+            <h3>Iniciar Sesion</h3>
+            <form id="form-login-admin">
+                <div class="form-group">
+                    <label for="admin-user">Usuario (ID):</label>
+                    <input type="text" id="admin-user" required placeholder="admin o ID de trabajador">
+                </div>
+                <div class="form-group">
+                    <label for="admin-pass">Contraseña:</label>
+                    <input type="password" id="admin-pass" required placeholder="••••••••">
+                </div>
+                <div id="admin-error" class="mensaje-error"></div>
+                
+                <button type="submit" class="btn-submit btn-admin-login">
+                    Acceder a Gestión
+                </button>
+            </form>
+
+           
+        </div>
+
+  
+    
+    <button onclick="window.location.href = '../pagina/galeria.html';" style="background-color: #ccc; color: #333; margin-top: 30px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        ← Volver a Catalogo
+    </button>
+</div>
+
+<script src="../js/login_admin.js"></script>
+
+</body>
+</html>

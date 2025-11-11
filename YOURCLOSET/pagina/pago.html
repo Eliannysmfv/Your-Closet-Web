@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagar Pedido - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        
+        .checkout-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 25px;
+            background: #fff; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #d63384; 
+            text-align: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+     
+        .summary-box {
+            border: 1px solid #f0f0f0;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .summary-box h3 {
+            color: #d63384;
+            margin-top: 0;
+            border-bottom: 1px dashed #f0f0f0;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .summary-info p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #333;
+        }
+        .summary-info span {
+            font-weight: bold;
+            color: #555;
+        }
+
+    
+        .summary-total {
+            background-color: #fce4ec; 
+            padding: 15px; border-radius: 4px; margin-bottom: 30px;
+            font-size: 1.1em; display: flex; justify-content: space-between;
+        }
+        .summary-total span { font-weight: bold; color: #d63384; }
+
+        
+        .payment-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+        .payment-title h3 { color: #d63384; margin: 0; }
+        .payment-icons img { height: 24px; margin-left: 10px; }
+        
+      
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333;}
+        .input-group input {
+            width: 100%; padding: 10px; margin-bottom: 18px; border: 1px solid #ccc;
+            border-radius: 4px; box-sizing: border-box; background-color: #fff; color: #333;
+            font-size: 1em;
+        }
+        .card-details-row { display: flex; gap: 20px; }
+        .card-details-row .input-group { flex: 1; }
+
+        
+        .btn-confirmar-pago {
+            width: 100%; padding: 14px; background-color: #d63384; color: white;
+            border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer;
+            margin-top: 20px; transition: background-color 0.3s;
+        }
+        .btn-confirmar-pago:hover { background-color: #b82a71; }
+        
+       
+        .mensaje-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); display: none; 
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .mensaje-box {
+            background: white; padding: 40px; border-radius: 10px;
+            text-align: center; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+        }
+        .mensaje-box h3 { color: #28a745; font-size: 1.8em; margin-bottom: 10px; }
+        .mensaje-box p { color: #333; margin-bottom: 25px; }
+        .mensaje-box .btn-ok {
+            background-color: #28a745; color: white; padding: 10px 20px;
+            border: none; border-radius: 5px; cursor: pointer; font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav style="padding: 10px; background-color: #f8f8f8; text-align: left;">
+        <a href="cliente_dashboard.html" class="btn-volver-carrito" 
+            style="color: #d63384; text-decoration: none; font-weight: bold; margin-left: 10px;">
+            ← Volver al Carrito
+        </a>
+    </nav>
+    
+    <main style="min-height: 50vh; padding: 20px 0;">
+        <div class="checkout-container">
+            <h2>Pagar y Finalizar Pedido</h2>
+
+            <div class="summary-box">
+                <h3>Resumen de la Orden</h3>
+                <div class="summary-info">
+                      
+                    <p>Número de orden: <span id="pago-numero-orden"></span></p>
+
+                    <p>Estado Actual: <span id="order-status-display" style="color: #ffc107; font-weight: bold;">PENDIENTE DE PAGO</span></p>
+     
+                </div>
+            </div>
+            
+
+            <div class="summary-total">
+                <span>Total a Pagar:</span>
+                <span id="pago-total-monto">S/. 0.00</span> 
+            </div>
+
+
+            <form id="checkout-form">
+                
+                <div class="payment-title">
+                    <h3>Datos de Tarjeta</h3>
+                    <div class="payment-icons">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/200px-Visa.svg.png" alt="Visa">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard">
+                    </div>
+                </div>
+
+          
+                <div class="input-group">
+                 <label for="numeroTarjeta">Número de tarjeta (*)</label>
+                    <input type="text" id="numeroTarjeta" placeholder="XXXX XXXX XXXX XXXX" maxlength="16" required>
+                 </div>
+
+              
+                <div class="input-group">
+                    <label for="nombre-titular">Nombre del titular (*)</label>
+                    <input type="text" id="nombre-titular" placeholder="Como aparece en la tarjeta" required>
+                </div>
+
+                <div class="card-details-row">
+                    <div class="input-group">
+                    <label for="fechaVencimiento">F. de Vencimiento (*)</label>
+                    <input type="text" id="fechaVencimiento" placeholder="MM/AA" maxlength="5" required>
+                </div>
+
+                
+                <div class="input-group">
+                        <label for="cvv">CVV (*)</label>
+                        <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+
+
+                <input type="hidden" id="metodo-pago-tarjeta" value="tarjeta">
+                
+                <button type="submit" class="btn-confirmar-pago">
+                    CONFIRMAR PAGO
+                </button>
+            </form>
+        </div>
+    </main>
+    
+    <div id="mensaje-exito" class="mensaje-overlay">
+        <div class="mensaje-box">
+            <h3>¡Pago Realizado con Éxito! </h3>
+            <p>Se realizó el pago exitosamente. Su pedido ha pasado al estado **PAGADO**.</p>
+            <p style="font-weight: bold;">Revisando su historial...</p>
+            <button class="btn-ok" onclick="redirigirAlHistorial()">Aceptar y Ver Historial</button>
+        </div>
+    </div>
+    
+    <script src="../js/cliente_dashboard.js"></script> 
+    
+    <script src="../js/pago.js"></script>
+    
+</body>
+</html>

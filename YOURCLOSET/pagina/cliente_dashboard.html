@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Cliente - Your Closet</title>
+    <link rel="stylesheet" href="../estilos/inicio.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+
+        body { background-color: #f7f3f7; }
+        .dashboard-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .header-perfil {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffb6c1;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .header-perfil h1 { color: #4b0082; margin: 0; }
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .tabs { display: flex; margin-bottom: 0; }
+        .tab-button {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            transition: background-color 0.3s;
+            margin-right: 5px;
+        }
+        .tab-button.active {
+            background-color: #ffb6c1;
+            color: #800080;
+            border-color: #ffb6c1;
+            border-bottom: 1px solid #ffb6c1; 
+        }
+        .tab-content {
+            border: 1px solid #ffb6c1;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 0 8px 8px 8px;
+            min-height: 400px;
+        }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+
+        #tabla-carrito {
+            width: 100%;
+            margin: 15px auto;
+            border-collapse: collapse;
+            }
+            #tabla-carrito th, #tabla-carrito td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            }
+            #tabla-carrito th {
+            background-color: #f2f2f2;
+        }
+        .total-carrito {
+            width: 100%;
+            text-align: right;
+            font-size: 1.5em;
+            padding-right: 10px;
+            margin-top: 10px;
+            }
+            .carrito-acciones {
+            width: 100%;
+            text-align: right;
+            padding-right: 10px;
+            margin-top: 20px;
+        }
+        .perfil-datos p { padding: 5px 0; border-bottom: 1px dotted #eee; }
+    </style>
+</head>
+<body onload="renderizarCarrito()">
+
+    <script>
+   
+        const KEY_CLIENTE_LOGGED_IN = 'cliente_logged_in';
+        const isClientLoggedIn = localStorage.getItem(KEY_CLIENTE_LOGGED_IN);
+
+        if (!isClientLoggedIn) {
+
+            window.location.href = 'login_cliente.html'; 
+        }
+
+
+        window.logoutCliente = function() {
+
+            localStorage.removeItem(KEY_CLIENTE_LOGGED_IN);
+            localStorage.removeItem('login_redirect_url');
+            localStorage.removeItem('cliente_data'); 
+
+
+            localStorage.removeItem('carrito');
+            localStorage.removeItem('totalPedido');
+
+
+            localStorage.setItem('contadorCarrito', '0');
+
+
+
+            localStorage.setItem('limpiar_campos_login', 'true'); //
+
+
+
+
+            console.log("✅ Sesión cerrada: carrito, total y perfil borrados.");
+            alert('Has cerrado sesión en Your Closet. Tu carrito ha sido vaciado.');
+            window.location.href = 'login_cliente.html';
+        };
+
+
+
+
+        window.mostrarPestana = function(id, boton) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(id).classList.add('active');
+            boton.classList.add('active');
+            
+           
+            if (id === 'carrito' && typeof renderizarCarrito === 'function') {
+                renderizarCarrito();
+            }
+          
+            if (id === 'perfil' && typeof cargarDatosPerfil === 'function') {
+                cargarDatosPerfil();
+            }
+            if (id === 'historial' && typeof renderizarHistorialPedidos === 'function') {
+                renderizarHistorialPedidos();
+            }
+        }
+    </script>
+    <div class="dashboard-container">
+        
+        <header class="header-perfil">
+            <h1>Bienvenido</h1>
+            <button onclick="logoutCliente()" class="btn-logout">
+                Cerrar Sesión
+            </button>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="mostrarPestana('carrito', this)">🛍️ Mi Carrito</button>
+            <button class="tab-button " onclick="mostrarPestana('perfil', this)">👤 Mi Perfil</button>
+            <button class="tab-button" onclick="mostrarPestana('historial', this)">📦 Historial de Pedidos</button>
+            <button class="tab-button" onclick="window.location.href = '../pagina/galeria.html';" style="background-color: #5cb85c; color: white;">
+                Volver a la Tienda
+            </button>
+        </div>
+
+        <div class="tab-content">
+            
+            <div id="carrito" class="tab-pane active">
+                <h2>Carrito de Compras Guardado</h2>
+                <div id="mensaje-carrito" style="text-align: center; margin: 15px auto;"></div>
+                
+                <table id="tabla-carrito">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carrito-items-body">
+                        <tr><td colspan="5">Cargando productos...</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="total-carrito">
+                    Total: <strong id="carrito-total">S/. 0.00</strong>
+                </div>
+                
+               
+                    <button onclick="vaciarCarritoTotal()" class="btn-vaciar"
+                        style="margin-left: 10px; padding: 10px 20px; width: auto; display: inline-block; cursor: pointer;">
+                    >
+                        Vaciar Carrito
+                    </button>
+                    
+                   <button onclick="procederAPago()" class="btn-guardar" 
+                        style="margin-left: 10px; padding: 10px 20px; width: auto; display: inline-block; cursor: pointer;">
+                        Proceder al Pago →
+                    </button>
+                </div>
+        
+
+
+            <div id="perfil" class="tab-pane">
+                <h2>👤 Datos Personales</h2>
+                <p>.</p>
+                
+                <div id="perfil-datos" class="perfil-datos" style="padding: 10px; border: 1px dashed #ddd; border-radius: 5px;">
+                    <p><strong>Nombre:</strong> <span id="perfil-nombre">Cargando...</span></p>
+                    <p><strong>Email:</strong> <span id="perfil-email">Cargando...</span></p>
+                    <p><strong>Teléfono:</strong> <span id="perfil-telefono">Cargando...</span></p>
+                    <p><strong>Dirección:</strong> <span id="perfil-direccion">Cargando...</span></p>
+                </div>
+                
+                </div>
+              
+
+
+
+        <div id="historial" class="tab-pane">
+                <div id="historial-contenido">
+            </div>
+        </div>
+
+
+         </div>    
+
+        </div> </div> 
+
+    <script src="../js/productos.js"></script> 
+
+    <script src="../js/cliente_dashboard.js"></script>
+    
+</body>
+</html> 
